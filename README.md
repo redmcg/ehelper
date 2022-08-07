@@ -1,12 +1,12 @@
 # ehelper
 Electronic helper functions written in Python
 
-Is ~= 1e-12A for silicon
-Is ~= 1e-6A for germanium
+Is ~= 1e-12A for silicon\
+Is ~= 1e-6A for germanium\
 nVt ~= 26mV @ 27°C 
 
-Defaults are:
-Is = 1e-12 (a silicon diode); and 
+Defaults are:\
+Is = 1e-12 (a silicon diode); and\
 nVt = .026
 
 The serial circuit is for a simple resistor and diode in series.
