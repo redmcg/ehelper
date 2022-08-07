@@ -16,7 +16,13 @@ in parallel with the diode.
 
 ##### Analyse existing circuit
 - asd.py: Analyse a Serial Diode Circuit
+```
+Usage: asd <Vcc> <R> [<Is>] [<nVt>]
+```
 - apd.py: Analyse a Parallel Diode Circuit
+```
+Usage: apd <Vcc> <R1> <R2> [<Is>] [<nVt>]
+```
 
 Example of a 470Ω resistor in series with a silicon diode:
 ```
@@ -25,7 +31,13 @@ Example of a 470Ω resistor in series with a silicon diode:
 
 ##### Design a new circuit
 - dsd.py: Design a Serial Diode Circuit
-- dsp.py: Design a Parellel Diode Circuit
+```
+Usage: dsd <Vcc> <Id> [<Is>] [<nVt>]
+```
+- dpd.py: Design a Parallel Diode Circuit
+```
+Usage: dpd <Vcc> <Id> <IR2> [<Is>] [<nVt>]
+```
 
 Example of which series resistor to use in a 5v circuit with 
 a silicon diode to get 10mA:

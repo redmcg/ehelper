@@ -7,7 +7,7 @@ from common import print_defaults, get_Is, get_nVt
 def main(argv):
   if len(argv) < 3 or len(argv) > 5:
     print("Design Parallel Diode")
-    print("Usage: apd <Vcc> <Id> <IR2> [<Is>] [<nVt>]")
+    print("Usage: dpd <Vcc> <Id> <IR2> [<Is>] [<nVt>]")
     print_defaults()
   else:
     Vcc = mpf(argv[0])
