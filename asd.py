@@ -2,7 +2,6 @@
 
 from sys import argv
 from mpmath import mp, mpf, exp, log, lambertw, fmul, fdiv, fsub, fadd, plot
-from common import print_defaults, get_Is, get_nVt
 import logging
 import argparse
 
@@ -23,9 +22,11 @@ def main(argv):
   N = args.N
   Vt = args.Vt
   nVt = N*Vt
+
   if args.verbose:
-    logging.basicConfig(format='%(levelname)s|%(message)s', level=logging.DEBUG)
-  logging.debug(f'Vs: {Vs}, R: {R}, Is: {Is}, N: {N}, Vt: {Vt}')
+    logging.basicConfig(format='%(levelname)s|%(message)s', level=logging.INFO)
+  logging.info(f'Vs: {Vs}, R: {R}, Is: {Is}, N: {N}, Vt: {Vt}')
+
   x = fdiv(fmul(fmul(Is,R),fsub(exp(fdiv(Vs,nVt)),mpf(1))),nVt)
   w = lambertw(x)
   Id = fdiv(fmul(w,nVt),R)
