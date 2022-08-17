@@ -49,3 +49,14 @@ a silicon diode to get 10mA:
 ```
 ./dsd.py 5 .01
 ```
+
+##### Analyse percentage of charge vs cycles of 𝜏
+- apt.py: Analyse percentage of charge vs cycles of 𝜏
+```
+usage: apt.py [-h] [-c] [-g] [-v] value
+```
+
+Example of % of charge after 1 cycle of 𝜏:
+```
+./apt.py 1
+```
