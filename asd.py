@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
-from sys import argv
 from mpmath import mp, mpf, exp, log, lambertw, fmul, fdiv, fsub, fadd, plot
 import logging
 import argparse
 
-def main(argv):
+def main():
   parser = argparse.ArgumentParser(description='Analyse Serial Diode')
   parser.add_argument('Vs', type=float, help='Voltage supply')
   parser.add_argument('R', type=float, help='Resistor value in Ohms')
@@ -39,4 +38,4 @@ def main(argv):
     plot([lambda x: fsub(Vs,fmul(x,R)), lambda x: fmul(nVt,log(fadd(fdiv(x,Is),1)))], [0, fdiv(Vs,R)], [0, Vs])
 
 if __name__ == "__main__":
-  main(argv[1:])
+  main()
