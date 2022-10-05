@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from mpmath import sqrt, fmul, fdiv, pi, plot, power, fadd, log10
+from mpmath import sqrt, fmul, fdiv, pi, plot, power, fadd, log10, fsub, fabs
 import argparse
 import logging
 
@@ -23,7 +23,7 @@ def main():
 
   xl = lambda w: fmul(l,w)
   xc = lambda w: fdiv(1,fmul(c,w))
-  z = lambda w: fadd(fadd(xl(w),xc(w)),r)
+  z = lambda w: fadd(fabs(fsub(xl(w),xc(w))),r)
 
   w0 = fdiv(1,sqrt(fmul(l,c)))
   f0 = fdiv(w0,fmul(2,pi))
@@ -46,7 +46,7 @@ def main():
   logging.info(f'z0: {z0}')
 
   if args.graph:
-    plot([lambda x: ratio2db(fdiv(xl(w0pow10(x)),z(w0pow10(x)))), lambda x: ratio2db(fdiv(xc(w0pow10(x)),z(w0pow10(x)))), lambda x: ratio2db(fdiv(r,z(w0pow10(x)))), lambda x: ratio2db(fdiv(z0,z(w0pow10(x))))], [-1,1], [ratio2db(fdiv(xl(w0pow10(-1)),z(w0pow10(-1)))),fadd(ratio2db(fdiv(xl(w0pow10(1)),z(w0pow10(1)))),1)])
+    plot([lambda x: ratio2db(fdiv(r,z(w0pow10(x))))], [-1,1], [ratio2db(fdiv(r,z(w0pow10(-1)))),1])
 
 if __name__ == "__main__":
   main()

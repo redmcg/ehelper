@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from mpmath import sqrt, fmul, fdiv, pi, plot, power, fadd, log10
+from mpmath import sqrt, fmul, fdiv, pi, plot, power, fadd, log10, fsub, fabs
 import argparse
 import logging
 
@@ -31,7 +31,7 @@ def main():
 
   xl = lambda w: fmul(l,w)
   xc = lambda w: fdiv(1,fmul(c,w))
-  z = lambda w: fdiv(1,fadd(fadd(fdiv(1,xl(w)),fdiv(1,xc(w))),fdiv(1,r)))
+  z = lambda w: fdiv(1,fadd(fabs(fsub(fdiv(1,xl(w)),fdiv(1,xc(w)))),fdiv(1,r)))
   z0 = z(w0)
 
   w0pow10 = lambda n: fmul(w0,power(10,n))
@@ -44,7 +44,7 @@ def main():
   logging.info(f'z0: {z0}')
 
   if args.graph:
-    plot([lambda x: ratio2db(fdiv(z(w0pow10(x)),xl(w0pow10(x)))), lambda x: ratio2db(fdiv(z(w0pow10(x)),xc(w0pow10(x)))), lambda x: ratio2db(fdiv(z(w0pow10(x)),r)), lambda x: ratio2db(fdiv(z(w0pow10(x)),z0))], [-1,1], [ratio2db(fdiv(z(w0pow10(1)),xl(w0pow10(1)))),fadd(ratio2db(fdiv(z(w0pow10(-1)),xl(w0pow10(-1)))),1)])
+    plot([lambda x: ratio2db(fdiv(z(w0pow10(x)),r))], [-1,1], [ratio2db(fdiv(z(w0pow10(-1)),r)),1])
 
 if __name__ == "__main__":
   main()
