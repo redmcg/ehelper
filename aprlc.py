@@ -27,7 +27,7 @@ def main():
   d = fdiv(a,w0)
   q = fmul(r,sqrt(fdiv(c,l)))
   dw = fmul(2,a)
-  df = fdiv(dw,fmul(2,pi))
+  bw = fdiv(dw,fmul(2,pi))
 
   xl = lambda w: fmul(l,w)
   xc = lambda w: fdiv(1,fmul(c,w))
@@ -37,7 +37,7 @@ def main():
   ratio2db = lambda r: fmul(20,log10(r))
 
   print("ω₀: {}, f₀: {} Hz".format(w0, f0))
-  print("Δω: {}, Δf: {} Hz".format(dw, df))
+  print("Δω: {}, Δf: {} Hz".format(dw, bw))
   print("Q: {}, ζ: {}".format(q, d))
 
   z0 = z(w0)

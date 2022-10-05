@@ -31,7 +31,7 @@ def main():
   q = fdiv(x0,r)
   dw = fdiv(w0,q)
   a = fdiv(dw,2)
-  df = fdiv(dw,fmul(2,pi))
+  bw = fdiv(dw,fmul(2,pi))
   d = fdiv(a,w0)
 
 
@@ -39,7 +39,7 @@ def main():
   ratio2db = lambda r: fmul(20,log10(r))
 
   print("ω₀: {}, f₀: {} Hz".format(w0, f0))
-  print("Δω: {}, Δf: {} Hz".format(dw, df))
+  print("Δω: {}, Δf: {} Hz".format(dw, bw))
   print("Q: {}, ζ: {}".format(q, d))
 
   z0 = z(w0)
