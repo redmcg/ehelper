@@ -60,3 +60,58 @@ Example of % of charge after 1 cycle of 𝜏:
 ```
 ./apt.py 1
 ```
+##### Analyse a Serial RLC Circuit
+```
+usage: asrlc.py [-h] [-g] [-v] R L C
+```
+
+Example of a circuit with:
+-  22  Ω resistance
+-  35 µH inductance
+- 120 ㎊ capacitance 
+
+```
+./asrlc.py 22 .00035 120e-12
+```
+
+##### Analyse a Parallel RLC Circuit
+```
+usage: aprlc.py [-h] [-g] [-v] R L C
+```
+
+Example of a circuit with: 
+- 130 kΩ resistance
+-  35 µH inductance
+- 120 ㎊ capacitance
+
+```
+./aprlc.py 130000 .00035 120e-12
+```
+
+##### Design a Serial RLC Circuit
+```
+usage: dsrlc.py [-h] [-g] [-v] f0 bw {R,L,C} value
+```
+
+Example of a circuit with:
+- 774 ㎑ resonance
+-  10 ㎑ bandwidth
+-  35 µH inductance
+
+```
+./dsrlc.py 774000 10000 L .00035
+```
+
+##### Design a Parallel RLC Circuit
+```
+usage: dprlc.py [-h] [-g] [-v] f0 bw {R,L,C} value
+```
+
+Example of a circuit with:
+- 774 ㎑ resonance
+-  10 ㎑ bandwidth
+-  35 µH inductance
+
+```
+./dprlc.py 774000 10000 L .00035
+```
