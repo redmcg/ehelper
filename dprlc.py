@@ -32,16 +32,16 @@ def main():
   match component:
     case "L":
       l = value
-      c = fdiv(1,fmul(l,power(fmul(2,fmul(a,q)),2)))
+      c = fdiv(1,fmul(power(w0,2),l))
       r = fdiv(1,fmul(2,fmul(c,a)))
     case "C":
       c = value
+      l = fdiv(1,fmul(power(w0,2),c))
       r = fdiv(1,fmul(2,fmul(c,a)))
-      l = fdiv(fmul(c,power(r,2)),power(q,2))
     case "R":
       r = value
       c = fdiv(1,fmul(2,fmul(r,a)))
-      l = fdiv(fmul(c,power(r,2)),power(q,2))
+      l = fdiv(1,fmul(power(w0,2),c))
 
   xl = lambda w: fmul(l,w)
   xc = lambda w: fdiv(1,fmul(c,w))
