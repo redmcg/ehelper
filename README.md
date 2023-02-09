@@ -67,7 +67,7 @@ usage: asrlc.py [-h] [-g] [-v] R L C
 
 Example of a circuit with:
 -  22  Ω resistance
--  35 µH inductance
+- 350 µH inductance
 - 120 ㎊ capacitance 
 
 ```
@@ -81,7 +81,7 @@ usage: aprlc.py [-h] [-g] [-v] R L C
 
 Example of a circuit with: 
 - 130 kΩ resistance
--  35 µH inductance
+- 350 µH inductance
 - 120 ㎊ capacitance
 
 ```
@@ -96,7 +96,7 @@ usage: dsrlc.py [-h] [-g] [-v] f0 bw {R,L,C} value
 Example of a circuit with:
 - 774 ㎑ resonance
 -  10 ㎑ bandwidth
--  35 µH inductance
+- 350 µH inductance
 
 ```
 ./dsrlc.py 774000 10000 L .00035
@@ -110,7 +110,7 @@ usage: dprlc.py [-h] [-g] [-v] f0 bw {R,L,C} value
 Example of a circuit with:
 - 774 ㎑ resonance
 -  10 ㎑ bandwidth
--  35 µH inductance
+- 350 µH inductance
 
 ```
 ./dprlc.py 774000 10000 L .00035
