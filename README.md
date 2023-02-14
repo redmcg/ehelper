@@ -115,3 +115,23 @@ Example of a circuit with:
 ```
 ./dprlc.py 774000 10000 L .00035
 ```
+
+##### Design a transformer circuit
+
+The transformer circuit is a input resistor in series with the primary of the transformer.
+
+On the secondary side is a single resistor providing the load.
+```
+usage: dt.py [-h] [-v] [-m] [-o] Vs Vf Vout Rout TR Lout
+```
+
+Example of a circuit with:
+- 1V max input supply at 774 ㎑
+- 0.25V max output desired
+- 2000Ω resistor output load
+- 2:1 turns ratio
+- 87.5 µH inductance on the secondary
+
+```
+./dt.py -m 1 774e3 -o .25 2000 2 87.5e-6
+```
