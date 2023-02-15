@@ -135,3 +135,22 @@ Example of a circuit with:
 ```
 ./dt.py -m 1 774e3 -o .25 2000 2 87.5e-6
 ```
+
+##### Analyse a transformer circuit
+```
+usage: at.py [-h] [-v] [-m] Vs Vf Vrin Vin Vout Rin Rout
+```
+
+Example of a circuit with:
+- 1V max input supply at 774 ㎑
+- 0.786656001V max measured over input resistor
+- 0.5V max measured over primary
+- 0.25V max measured over secondary
+- 2619.32725257302Ω input resistor
+- 2000Ω output resistor
+
+```
+./at.py -m 1 774000 0.786656001 .5 .25 2619.32725257302 2000
+```
+
+
