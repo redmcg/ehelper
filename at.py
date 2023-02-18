@@ -6,7 +6,6 @@ import logging
 
 def main():
   parser = argparse.ArgumentParser(description='Analyse Transformer')
-  parser.add_argument('Vs', type=float, help='Voltage supply (RMS by default)')
   parser.add_argument('Vf', type=float, help='Voltage frequency')
   parser.add_argument('Vrin', type=float, help='Measured voltage over the input resistor (RMS by default)')
   parser.add_argument('Vin', type=float, help='Measured voltage over the primary (RMS by default)')
@@ -17,7 +16,6 @@ def main():
   parser.add_argument('-m', '--max', action='store_true', help='Use maximum voltage for all measured voltages instead of RMS')
   args = parser.parse_args()
 
-  Vs = args.Vs
   Vf = args.Vf
   Vrin = args.Vrin
   Vin = args.Vin
@@ -26,14 +24,13 @@ def main():
   Rout = args.Rout
 
   if args.max:
-    Vs = fdiv(Vs,sqrt(2)) 
     Vrin = fdiv(Vrin,sqrt(2)) 
     Vin = fdiv(Vin,sqrt(2)) 
     Vout = fdiv(Vout,sqrt(2)) 
 
   if args.verbose:
     logging.basicConfig(format='%(levelname)s|%(message)s', level=logging.INFO)
-  logging.info(f'Vs: {Vs}, Vf: {Vf}, Vrin: {Vrin}, Vin: {Vin}, Vout: {Vout}, Rin: {Rin}, Rout: {Rout}')
+  logging.info(f'Vf: {Vf}, Vrin: {Vrin}, Vin: {Vin}, Vout: {Vout}, Rin: {Rin}, Rout: {Rout}')
 
   Iout = fdiv(Vout,Rout)
   P = fmul(Vout,Iout)
