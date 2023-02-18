@@ -37,14 +37,13 @@ def main():
 
   Iout = fdiv(Vout,Rout)
   P = fmul(Vout,Iout)
-  phase = fmul(2,acos(fdiv(Vs,fadd(Vrin,Vin))))
-  Iin = fdiv(P,fmul(Vin,cos(phase)))
+  Iin = fdiv(Vrin,Rin)
+  phase = acos(fdiv(P,fmul(Vin,Iin)))
   Zin = fdiv(Vin,Iin)
-  Xout = Rout/tan(phase)
+  Xout = fdiv(Rout,tan(phase))
   Lout = fdiv(Xout,fmul(2,fmul(pi,Vf)))
   TR = fdiv(Vin,Vout)
   Lin = fmul(power(TR,2),Lout)
-
   print("P: {}, Iin: {}, Iout: {}".format(P, Iin, Iout))
   print("Lin: {}, Lout: {}, TR: {}".format(Lin, Lout, TR))
   print("Zin: {}, phase: {}°".format(Zin, fdiv(fmul(phase,180),pi)))

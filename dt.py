@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from mpmath import mp, mpf, exp, log, lambertw, fmul, fdiv, fsub, fadd, plot, pi, atan, cos, power, sqrt
+from mpmath import mp, mpf, exp, log, lambertw, fmul, fdiv, fsub, fadd, plot, pi, atan, cos, power, sqrt, sin
 import argparse
 import logging
 
@@ -41,9 +41,14 @@ def main():
   phase = fdiv(pi,2) - atan(fdiv(Xout,Rout))
   Iin = fdiv(P,fmul(Vin,cos(phase)))
   Zin = fdiv(Vin,Iin)
-  Vrin = fsub(fdiv(Vs,cos(fdiv(phase,2))),Vin)
-  Rin = fdiv(Vrin,Iin)
+  ZinR = fmul(Zin,cos(phase))
+  ZinX = fmul(Zin,sin(phase))
+  Zs = fdiv(Vs,Iin)
+  ZsR = sqrt(fsub(power(Zs,2),power(ZinX,2)))
+  Rin = fsub(ZsR,ZinR)
+  Vrin = fmul(Rin,Iin)
   Lin = fmul(power(TR,2),Lout)
+  print("Zin: {}, ZinR: {}, ZinX: {}, Zs: {}, ZsR: {}, Rin: {}".format(Zin, ZinR, ZinX, Zs, ZsR, Rin))
   print("P: {}, Iout: {}".format(P, Iout))
   print("Vrin: {}, Vin: {}, Iin: {}, Rin: {}, Lin: {}".format(Vrin, Vin, Iin, Rin, Lin))
   print("Zin: {}, phase: {}°".format(Zin, fdiv(fmul(phase,180),pi)))
