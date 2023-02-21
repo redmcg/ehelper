@@ -122,18 +122,20 @@ The transformer circuit is a input resistor in series with the primary of the tr
 
 On the secondary side is a single resistor providing the load.
 ```
-usage: dt.py [-h] [-v] [-m] [-o] Vs Vf Vout Rout TR Lout
+usage: dt.py [-h] [-v] [-m] [-o] Vsrc Vf Vout Rrin Rrout Rload Lout TR
 ```
 
 Example of a circuit with:
-- 1V max input supply at 774 ㎑
-- 0.25V max output desired
-- 2000Ω resistor output load
-- 2:1 turns ratio
-- 87.5 µH inductance on the secondary
+- 0.707107 Vrms input supply at 195.3125 Hz
+- 0.256941 Vrms output desired
+- 256Ω resistance measured on the primary inductor
+- 137Ω resistance measured on the secondary inductor
+- 10kΩ output resistor
+- 0.32H inductance on the secondary
+- 1.414213562:1 turns ratio
 
 ```
-./dt.py -m 1 774e3 -o .25 2000 2 87.5e-6
+./dt.py -v 0.707107 195.3125 0.256941 256 137 10000 .32 1.414213562
 ```
 
 ##### Analyse a transformer circuit
@@ -142,7 +144,7 @@ usage: at.py [-h] [-v] [-m] Vsrc Vf Vs Vin Vout Rs Rrin Rrout Rload
 ```
 
 Example of a circuit with:
-- Input supply of 0.707107 Vrms at 195 Hz
+- Input supply of 0.707107 Vrms at 195.3125 Hz
 - 0.469346 Vrms measured over input resistor
 - 0.391846 Vrms measured over primary inductor
 - 0.256941 Vrm measured over secondary inductor
@@ -155,4 +157,19 @@ Example of a circuit with:
 ./at.py -v 0.707107 195.3125 0.469346 0.391846 0.256941 1000 256 137 10000
 ```
 
+##### Analyse a RL circuit
+```
+usage: at.py [-h] [-v] [-m] Vsrc Vf Vs Vin Vout Rs Rrin Rrout Rload
+```
+
+Example of a circuit with:
+- Input supply of 0.707107 Vrms
+- 0.477341 Vrms measured over input resistor
+- 0.394315 Vrms measured over primary inductor
+- 1kΩ resistor
+- 256Ω resistance measured on the inductor
+
+```
+usage: arl.py [-h] [-v] [-m] Vsrc Vr Vl Rr Rlr
+```
 
