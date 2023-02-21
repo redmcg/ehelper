@@ -138,19 +138,21 @@ Example of a circuit with:
 
 ##### Analyse a transformer circuit
 ```
-usage: at.py [-h] [-v] [-m] Vf Vrin Vin Vout Rin Rout
+usage: at.py [-h] [-v] [-m] Vsrc Vf Vs Vin Vout Rs Rrin Rrout Rload
 ```
 
 Example of a circuit with:
-- Input supply at 774 ㎑
-- 0.786656001V max measured over input resistor
-- 0.5V max measured over primary
-- 0.25V max measured over secondary
-- 2619.32725257302Ω input resistor
-- 2000Ω output resistor
+- Input supply of 0.707107 Vrms at 195 Hz
+- 0.469346 Vrms measured over input resistor
+- 0.391846 Vrms measured over primary inductor
+- 0.256941 Vrm measured over secondary inductor
+- 1kΩ input resistor
+- 256Ω resistance measured on the primary inductor
+- 137Ω resistance measured on the secondary inductor
+- 10kΩ output resistor
 
 ```
-./at.py -m 774000 0.786656001 .5 .25 2619.32725257302 2000
+./at.py -v 0.707107 195.3125 0.469346 0.391846 0.256941 1000 256 137 10000
 ```
 
 
