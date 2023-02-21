@@ -157,9 +157,9 @@ Example of a circuit with:
 ./at.py -v 0.707107 195.3125 0.469346 0.391846 0.256941 1000 256 137 10000
 ```
 
-##### Analyse a RL circuit
+##### Analyse a serial RL circuit
 ```
-usage: at.py [-h] [-v] [-m] Vsrc Vf Vs Vin Vout Rs Rrin Rrout Rload
+usage: asrl.py [-h] [-v] [-m] Vsrc Vr Vl Rr Rlr
 ```
 
 Example of a circuit with:
@@ -170,6 +170,21 @@ Example of a circuit with:
 - 256Ω resistance measured on the inductor
 
 ```
-usage: arl.py [-h] [-v] [-m] Vsrc Vr Vl Rr Rlr
+./asrl.py 0.707107 0.477341 0.394315 1000 256
+```
+
+##### Design a serial RL circuit
+```
+./dsrl.py 1.24302 195.3125 256 .64 R 1
+```
+
+Example of a circuit with:
+- 0.707107 Vrms input supply at 195.3125 Hz
+- 256Ω resistance measured on the inductor
+- 0.64H inductance
+- A desired ratio of 1 for the inductor (i.e. the voltage over inductor and resistor should match)
+
+```
+./dsrl.py 0.707107 195.3125 256 .64 R 1
 ```
 
