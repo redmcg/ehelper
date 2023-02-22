@@ -26,9 +26,9 @@ def main():
     logging.basicConfig(format='%(levelname)s|%(message)s', level=logging.INFO)
   logging.info(f'Vs: {Vs}, R: {R}, Is: {Is}, N: {N}, Vt: {Vt}')
 
-  x = fdiv(fmul(fmul(Is,R),fsub(exp(fdiv(Vs,nVt)),mpf(1))),nVt)
+  x = fdiv(fmul(fmul(Is,R),exp(fdiv(fadd(Vs,fmul(Is,R)),nVt))),nVt)
   w = lambertw(x)
-  Id = fdiv(fmul(w,nVt),R)
+  Id = fsub(fdiv(fmul(w,nVt),R),Is)
   Vd = fmul(log(fadd(fdiv(Id,Is),mpf(1))),nVt)
   VR = fsub(Vs, Vd)
   IR = fdiv(VR, R)
