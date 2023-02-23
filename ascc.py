@@ -5,7 +5,7 @@ import logging
 import argparse
 
 def main():
-  parser = argparse.ArgumentParser(description='Analyse Common Collector (Voltage/Emitter Follower)')
+  parser = argparse.ArgumentParser(description='Analyse Serial Biased Common Collector (Voltage/Emitter Follower)')
   parser.add_argument('Vs', type=float, help='Source Voltage')
   parser.add_argument('Rs', type=float, help='Source resistor value (Ohms)')
   parser.add_argument('Rload', type=float, help='Load resistor value (Ohms)')
