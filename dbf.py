@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from mpmath import sin, cos, fsub, fmul, fdiv, power, pi
+from mpmath import sin, cos, fadd, fsub, fmul, fdiv, power, sqrt, exp, log10, pi, mpc, cplot
 from os import remove
 import argparse
 import logging
@@ -28,9 +28,12 @@ def write_ngspice(f, c, wc, R, Rs, current):
   f.write("{}in in 0 DC 0 AC 1\n".format(source))
 
   if Rs:
-    f.write("Rs in 1 {}\n".format(R))
-    nextinnode = 1
-    nextnode = 2
+    if len(c) == 1 and c[0].letter == "C":
+      nextinnode = "out"
+    else:
+      nextinnode = 1
+      nextnode = 2
+    f.write("Rs in {} {}\n".format(nextinnode,R))
   else:
     nextinnode = "in"
     nextnode = 1
@@ -54,11 +57,11 @@ def write_ngspice(f, c, wc, R, Rs, current):
   f.write("R{} {} 0 {}\n".format(len(c)+1,nextinnode,R))
 
   f.write("\n")
-  f.write(".AC DEC 100 0.01 1MEG\n")
+  f.write(".AC DEC 100 0.01 1GIG\n")
   f.write(".control\n")
   f.write("run\n")
-  if Rs:
-    f.write("plot vdb(out)-vdb(1)\n")
+  if Rs and not current:
+    f.write("plot vdb(out)+6\n")
   else:
     f.write("plot vdb(out)\n")
   f.write(".endc\n")
@@ -76,6 +79,7 @@ def main():
   parser.add_argument('-n', '--ngspice', metavar="filename", help='Write an ngspice file')
   parser.add_argument('-f', '--force', action='store_true', help='Force creation of an ngfile by deleting an existing file')
   parser.add_argument('-v', '--verbose', action='store_true', help='Print debug')
+  parser.add_argument('-g', '--graph', action='store_true', help='Display the complex output of the transfer function')
   args = parser.parse_args()
 
   fc = args.fc
@@ -110,22 +114,28 @@ def main():
     for j in range(2,N+1):
       g.append(fdiv(fmul(a[j-1],a[j-2]),fmul(c[j-2],g[j-2])))
 
-  if args.source:
-    Rt = fmul(R,2)
-  else:
-    Rt = R
-
   c = []
 
   i = 1
   for v in reversed(g):
     v = fdiv(v,wc)
-    if i % 2 == 0 and not args.current or i % 2 == 1 and args.current:
-      comp = "C"
-      v = fdiv(v,Rt)
-    else:
+    if i % 2 == 1 and not (args.current or args.source) or i % 2 == 0 and (args.current or args.source):
+      if args.source:
+        Rt = fmul(R,2)
+      else:
+        Rt = R
+
       comp = "L"
       v = fmul(v,Rt)
+    else:
+      if args.source:
+        Rt = fdiv(R,2)
+      else:
+        Rt = R
+
+      comp = "C"
+      v = fdiv(v,Rt)
+
     v = Component(comp,i,v)
     v.print()
     c.append(v)
@@ -138,10 +148,19 @@ def main():
       except:
         pass
     try:
-      with open(args.ngspice, "x") as f:
+      with open("/dev/stdout", "w") if args.ngspice == "-" else open(args.ngspice, "x") as f:
         write_ngspice(f, c, wc, R, args.source, args.current)
     except FileExistsError:
       print("\nCouldn't create {} as the file already exists. Use '-f' if you wish to replace it".format(args.ngspice))
+
+  if args.graph:
+    def H(s):
+      res = mpc(1,0)
+      for k in range(1,N+1):
+        res = fmul(res,fdiv(wc,fsub(s,fmul(wc,exp(fdiv(fmul(mpc(0,fsub(fadd(fmul(2,k),N),1)),pi),fmul(2,N)))))))
+      return res
+
+    cplot(H, points=100000, verbose=True)
 
 if __name__ == "__main__":
   main()
