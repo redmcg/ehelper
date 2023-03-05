@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from mpmath import sin, cos, fadd, fsub, fmul, fdiv, power, sqrt, exp, log10, pi, mpc, cplot
+from mpmath import sin, cos, fadd, fsub, fmul, fdiv, power, sqrt, exp, log10, pi, mpc, cplot, fabs
 from os import remove
 import argparse
 import logging
@@ -158,9 +158,10 @@ def main():
       res = mpc(1,0)
       for k in range(1,N+1):
         res = fmul(res,fdiv(wc,fsub(s,fmul(wc,exp(fdiv(fmul(mpc(0,fsub(fadd(fmul(2,k),N),1)),pi),fmul(2,N)))))))
+
       return res
 
-    cplot(H, points=100000, verbose=True)
+    cplot(lambda x: fabs(H(x)), re=[float(wc*-2), float(wc*2)], im=[float(wc*-2), float(wc*2)], points=100000, verbose=True)
 
 if __name__ == "__main__":
   main()
