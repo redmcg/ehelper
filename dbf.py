@@ -153,11 +153,42 @@ def main():
     except FileExistsError:
       print("\nCouldn't create {} as the file already exists. Use '-f' if you wish to replace it".format(args.ngspice))
 
+  sp = []
+  for k in range(1,N+1):
+    sp.append(fmul(-wc,exp(fdiv(fmul(mpc(0,fsub(fadd(fmul(2,k),N),1)),pi),fmul(2,N)))))
+
+  poly = []
+  for p in sp:
+    if len(poly) == 0:
+      poly = [p, 1.0]
+    else:
+      add = []
+      for c in poly:
+        add.append(fmul(c,p))
+      poly.insert(0,0)
+      for i in range(len(add)):
+        poly[i] = fadd(poly[i], add[i])
+
+  poly_suffix = ["", "s", "s²", "s³"]
+
+  poly_s = ""
+  sep = ""
+  for i in range(len(poly)-1,-1,-1):
+    poly_s = poly_s + sep
+    sep = " + "
+    if poly[i].real != 1 or i == 0:
+      poly_s = poly_s + f"{poly[i].real}"
+
+    poly_s = poly_s + (poly_suffix[i] if i < len(poly_suffix) else f"s^{i}")
+
+  print()
+  print(poly_s)
+
   if args.graph:
     def H(s):
       res = mpc(1,0)
       for k in range(1,N+1):
-        res = fmul(res,fdiv(wc,fsub(s,fmul(wc,exp(fdiv(fmul(mpc(0,fsub(fadd(fmul(2,k),N),1)),pi),fmul(2,N)))))))
+        res = fmul(res,fdiv(wc,fadd(s,sp[k-1])))
 
       return res
 
