@@ -159,8 +159,9 @@ def main():
 
   poly = []
   for p in sp:
+    p = fdiv(p,wc)
     if len(poly) == 0:
-      poly = [p, 1.0]
+      poly = [p, 1]
     else:
       add = []
       for c in poly:
@@ -176,8 +177,9 @@ def main():
   for i in range(len(poly)-1,-1,-1):
     poly_s = poly_s + sep
     sep = " + "
-    if poly[i].real != 1 or i == 0:
-      poly_s = poly_s + f"{poly[i].real}"
+    v = poly[i].real
+    if v != 1 or i == 0:
+      poly_s = poly_s + f"{v}"
 
     poly_s = poly_s + (poly_suffix[i] if i < len(poly_suffix) else f"s^{i}")
 
