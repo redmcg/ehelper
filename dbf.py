@@ -157,18 +157,15 @@ def main():
   for k in range(1,N+1):
     sp.append(fmul(-wc,exp(fdiv(fmul(mpc(0,fsub(fadd(fmul(2,k),N),1)),pi),fmul(2,N)))))
 
-  poly = []
+  poly = [1]
   for p in sp:
     p = fdiv(p,wc)
-    if len(poly) == 0:
-      poly = [p, 1]
-    else:
-      add = []
-      for c in poly:
-        add.append(fmul(c,p))
-      poly.insert(0,0)
-      for i in range(len(add)):
-        poly[i] = fadd(poly[i], add[i])
+    add = []
+    for c in poly:
+      add.append(fmul(c,p))
+    poly.insert(0,0)
+    for i in range(len(add)):
+      poly[i] = fadd(poly[i], add[i])
 
   poly_suffix = ["", "s", "s²", "s³"]
 
