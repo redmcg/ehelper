@@ -117,17 +117,17 @@ def main():
 
   c = []
 
+  if args.source:
+    Rtot = fmul(R,2)
+  else:
+    Rtot = R
+
   i = 1
   for v in reversed(g):
     v = fdiv(v,wc)
     if i % 2 == 1 and not (args.current or args.source) or i % 2 == 0 and (args.current or args.source):
-      if args.source:
-        Rt = fmul(R,2)
-      else:
-        Rt = R
-
       comp = "L"
-      v = fmul(v,Rt)
+      v = fmul(v,Rtot)
     else:
       if args.source:
         Rt = fdiv(R,2)
@@ -171,7 +171,7 @@ def main():
 
   poly.reverse()
 
-  def poly_string(poly):
+  def poly_string(poly, real_only = True):
     poly_suffix = ["", "s", "s²", "s³"]
 
     poly_s = ""
@@ -179,9 +179,11 @@ def main():
     for i in range(len(poly)-1,-1,-1):
       poly_s = poly_s + sep
       sep = " + "
-      v = poly[len(poly)-1-i].real
+      v = poly[len(poly)-1-i]
+      if real_only:
+        v = v.real
       if v != 1 or i == 0:
-        poly_s = poly_s + f"{v}"
+        poly_s = poly_s + f"{v}".replace("j","i")
 
       poly_s = poly_s + (poly_suffix[i] if i < len(poly_suffix) else f"s^{i}")
 
@@ -191,15 +193,20 @@ def main():
   for i in range(0,len(poly)):
     normalised_poly.append(fdiv(poly[i],power(wc,i)))
 
-  Rtot = fmul(R,2)
   component_poly = []
   for i in range(0,len(normalised_poly)):
     k = len(normalised_poly) - 1 - i
-    component_poly.append(fmul(fdiv(Rtot,power(wc,k)),normalised_poly[i]))
+    component_poly.append(fdiv(fmul(normalised_poly[i],Rtot),power(wc,k)))
 
   logging.info(f"Product of poles: {poly_string(poly)}")
   logging.info(f"Normalised: {poly_string(normalised_poly)}")
   logging.info(f"Component Poly: {poly_string(component_poly)}")
+
+  mod = power(Rtot,fdiv(1,N))
+  alt_comp_poly = ""
+  for p in sp:
+    alt_comp_poly = alt_comp_poly + f"({poly_string([fdiv(mod,wc), fdiv(fmul(mod,p),wc)], False)}) "
+  logging.info(f"Alternate form: {alt_comp_poly}")
 
   if args.graph:
     cplot(lambda x: fabs(fdiv(power(wc,N),polyval(poly,x))), re=[float(wc*-2), float(wc*2)], im=[float(wc*-2), float(wc*2)], points=100000, verbose=True)
