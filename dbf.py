@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from mpmath import sin, cos, fadd, fsub, fmul, fdiv, power, sqrt, exp, log10, pi, mpc, cplot, fabs
+from mpmath import sin, cos, fadd, fsub, fmul, fdiv, power, sqrt, exp, log10, pi, mpc, cplot, fabs, polyval
 from os import remove
 import argparse
 import logging
@@ -159,7 +159,6 @@ def main():
 
   poly = [1]
   for p in sp:
-    p = fdiv(p,wc)
     add = []
     for c in poly:
       add.append(fmul(c,p))
@@ -184,14 +183,8 @@ def main():
   print(poly_s)
 
   if args.graph:
-    def H(s):
-      res = mpc(1,0)
-      for k in range(1,N+1):
-        res = fmul(res,fdiv(wc,fadd(s,sp[k-1])))
-
-      return res
-
-    cplot(lambda x: fabs(H(x)), re=[float(wc*-2), float(wc*2)], im=[float(wc*-2), float(wc*2)], points=100000, verbose=True)
+    poly.reverse()
+    cplot(lambda x: fabs(fdiv(power(wc,N),polyval(poly,x))), re=[float(wc*-2), float(wc*2)], im=[float(wc*-2), float(wc*2)], points=100000, verbose=True)
 
 if __name__ == "__main__":
   main()
