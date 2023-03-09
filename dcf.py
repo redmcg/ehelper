@@ -86,6 +86,7 @@ def main():
   if args.verbose:
     logging.basicConfig(format='%(levelname)s|%(message)s', level=logging.INFO)
   logging.info(f'fc: {fc}, N: {N}, R: {R}, e: {e}, radians: {args.radians}, current: {args.current}, ngspice: {args.ngspice}, force: {args.force}')
+  logging.info(f'wc: {wc}')
 
   ed = fmul(log10(fadd(power(e,2),1)),10) # ripple in decibles
   beta = log(coth(fdiv(ed,fdiv(40,log(10)))))
@@ -126,7 +127,7 @@ def main():
       if c[len(c)-1].letter == "L":
         Rt = fdiv(1,Rt)
 
-      Rt = fmul(Rt,R)
+      Rl = Rt = fmul(Rt,R)
 
       comp = "R"
       v = Rt
@@ -160,12 +161,13 @@ def main():
     except FileExistsError:
       print("\nCouldn't create {} as the file already exists. Use '-f' if you wish to replace it".format(args.ngspice))
 
+  logging.info(f'Poles ({N}):')
   sp = []
   for m in range(1,N+1):
     thetam = fmul(fdiv(pi,2),fdiv(fsub(fmul(2,m),1),N))        
     spm = mpc(fmul(sinh(fmul(fdiv(1,N),asinh(fdiv(1,e)))),sin(thetam)),fmul(cosh(fmul(fdiv(1,N),asinh(fdiv(1,e)))),cos(thetam)))
-    if spm.real > 0:
-      sp.append(fmul(wc,spm))
+    sp.append(fmul(wc,spm))
+    logging.info(f'sp[{m}]: {sp[m-1]*-1}')
 
   poly = [fmul(power(2,fsub(N,1)),e)]
   for p in sp:
@@ -176,24 +178,39 @@ def main():
     for i in range(len(add)):
       poly[i] = fadd(poly[i], add[i])
 
-  poly_suffix = ["", "s", "s²", "s³"]
+  poly.reverse()
 
-  poly_s = ""
-  sep = ""
-  for i in range(len(poly)-1,-1,-1):
-    poly_s = poly_s + sep
-    sep = " + "
-    v = poly[i].real
-    if v != 1 or i == 0:
-      poly_s = poly_s + f"{v}"
+  def poly_string(poly):
+    poly_suffix = ["", "s", "s²", "s³"]
 
-    poly_s = poly_s + (poly_suffix[i] if i < len(poly_suffix) else f"s^{i}")
+    poly_s = ""
+    sep = ""
+    for i in range(len(poly)-1,-1,-1):
+      poly_s = poly_s + sep
+      sep = " + "
+      v = poly[len(poly)-1-i].real
+      if v != 1 or i == 0:
+        poly_s = poly_s + f"{v}"
 
-  print()
-  print(poly_s)
+      poly_s = poly_s + (poly_suffix[i] if i < len(poly_suffix) else f"s^{i}")
+
+    return poly_s
+
+  normalised_poly = []
+  for i in range(0,len(poly)):
+    normalised_poly.append(fdiv(poly[i],power(wc,i)))
+
+  Rtot = fadd(R,Rl)
+  component_poly = []
+  for i in range(0,len(normalised_poly)):
+    k = len(normalised_poly) - 1 - i
+    component_poly.append(fdiv(fmul(fdiv(Rtot,power(wc,k)),normalised_poly[i]),normalised_poly[len(normalised_poly)-1]))
+
+  logging.info(f"Product of poles: {poly_string(poly)}")
+  logging.info(f"Normalised: {poly_string(normalised_poly)}")
+  logging.info(f"Component Poly: {poly_string(component_poly)}")
 
   if args.graph:
-    poly.reverse()
     cplot(lambda x: fabs(fdiv(power(wc,N),polyval(poly,x))), re=[float(-2*wc), float(2*wc)], im=[float(-2*wc), float(2*wc)], points=100000, verbose=True)
 
 if __name__ == "__main__":
