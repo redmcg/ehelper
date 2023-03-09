@@ -95,6 +95,7 @@ def main():
   if args.verbose:
     logging.basicConfig(format='%(levelname)s|%(message)s', level=logging.INFO)
   logging.info(f'fc: {fc}, N: {N}, R: {R}, source: {args.source}, radians: {args.radians}, current: {args.current}, ngspice: {args.ngspice}, force: {args.force}')
+  logging.info(f'wc: {wc}')
 
   a = []
   c = []
@@ -153,9 +154,11 @@ def main():
     except FileExistsError:
       print("\nCouldn't create {} as the file already exists. Use '-f' if you wish to replace it".format(args.ngspice))
 
+  logging.info(f'Poles ({N}):')
   sp = []
   for k in range(1,N+1):
     sp.append(fmul(-wc,exp(fdiv(fmul(mpc(0,fsub(fadd(fmul(2,k),N),1)),pi),fmul(2,N)))))
+    logging.info(f'sp[{k}]: {sp[k-1]*-1}')
 
   poly = [1]
   for p in sp:
@@ -166,24 +169,39 @@ def main():
     for i in range(len(add)):
       poly[i] = fadd(poly[i], add[i])
 
-  poly_suffix = ["", "s", "s²", "s³"]
+  poly.reverse()
 
-  poly_s = ""
-  sep = ""
-  for i in range(len(poly)-1,-1,-1):
-    poly_s = poly_s + sep
-    sep = " + "
-    v = poly[i].real
-    if v != 1 or i == 0:
-      poly_s = poly_s + f"{v}"
+  def poly_string(poly):
+    poly_suffix = ["", "s", "s²", "s³"]
 
-    poly_s = poly_s + (poly_suffix[i] if i < len(poly_suffix) else f"s^{i}")
+    poly_s = ""
+    sep = ""
+    for i in range(len(poly)-1,-1,-1):
+      poly_s = poly_s + sep
+      sep = " + "
+      v = poly[len(poly)-1-i].real
+      if v != 1 or i == 0:
+        poly_s = poly_s + f"{v}"
 
-  print()
-  print(poly_s)
+      poly_s = poly_s + (poly_suffix[i] if i < len(poly_suffix) else f"s^{i}")
+
+    return poly_s
+
+  normalised_poly = []
+  for i in range(0,len(poly)):
+    normalised_poly.append(fdiv(poly[i],power(wc,i)))
+
+  Rtot = fmul(R,2)
+  component_poly = []
+  for i in range(0,len(normalised_poly)):
+    k = len(normalised_poly) - 1 - i
+    component_poly.append(fmul(fdiv(Rtot,power(wc,k)),normalised_poly[i]))
+
+  logging.info(f"Product of poles: {poly_string(poly)}")
+  logging.info(f"Normalised: {poly_string(normalised_poly)}")
+  logging.info(f"Component Poly: {poly_string(component_poly)}")
 
   if args.graph:
-    poly.reverse()
     cplot(lambda x: fabs(fdiv(power(wc,N),polyval(poly,x))), re=[float(wc*-2), float(wc*2)], im=[float(wc*-2), float(wc*2)], points=100000, verbose=True)
 
 if __name__ == "__main__":
