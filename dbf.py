@@ -202,10 +202,9 @@ def main():
   logging.info(f"Normalised: {poly_string(normalised_poly)}")
   logging.info(f"Component Poly: {poly_string(component_poly)}")
 
-  mod = power(Rtot,fdiv(1,N))
-  alt_comp_poly = ""
+  alt_comp_poly = f"{Rtot} * "
   for p in sp:
-    alt_comp_poly = alt_comp_poly + f"({poly_string([fdiv(mod,wc), fdiv(fmul(mod,p),wc)], False)}) "
+    alt_comp_poly = alt_comp_poly + f"({poly_string([fdiv(1,wc), fdiv(fmul(1,p),wc)], False)}) "
   logging.info(f"Alternate form: {alt_comp_poly}")
 
   if args.graph:
