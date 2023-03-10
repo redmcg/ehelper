@@ -204,7 +204,7 @@ def main():
 
   alt_comp_poly = f"{Rtot} * "
   for p in sp:
-    alt_comp_poly = alt_comp_poly + f"({poly_string([fdiv(1,wc), fdiv(fmul(1,p),wc)], False)}) "
+    alt_comp_poly = alt_comp_poly + f"({poly_string([fdiv(1,wc), fdiv(p,wc)], False)}) "
   logging.info(f"Alternate form: {alt_comp_poly}")
 
   if args.graph:
