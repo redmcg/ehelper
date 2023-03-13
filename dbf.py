@@ -208,7 +208,7 @@ def main():
   logging.info(f"Alternate form: {alt_comp_poly}")
 
   if args.graph:
-    cplot(lambda x: fabs(fdiv(power(wc,N),polyval(poly,x))), re=[float(wc*-2), float(wc*2)], im=[float(wc*-2), float(wc*2)], points=100000, verbose=True)
+    cplot(lambda x: fabs(fdiv(R,polyval(component_poly,x))), re=[float(wc*-2), float(wc*2)], im=[float(wc*-2), float(wc*2)], points=100000, verbose=True)
 
 if __name__ == "__main__":
   main()

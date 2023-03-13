@@ -15,7 +15,7 @@ class Component:
     print("{}{}: {}".format(self.letter,self.number,self.value))
     
   def write_ngspice(self, f, innode, outnode):
-    f.write("{}{} {} {} {}\n".format(self.letter,self.number,innode,outnode,self.value))
+    f.write("{}{} {} {} {}\n".format(self.letter,self.number,innode,outnode,self.value.real))
 
 def write_ngspice(f, c, R, current):
   if current:
@@ -214,7 +214,7 @@ def main():
   logging.info(f"Alternate form: {alt_comp_poly}")
 
   if args.graph:
-    cplot(lambda x: fabs(fdiv(power(w0,N),polyval(poly,x))), re=[float(-2*wc), float(2*wc)], im=[float(-2*wc), float(2*wc)], points=100000, verbose=True)
+    cplot(lambda x: fabs(fdiv(Rl,polyval(component_poly,x))), re=[float(-2*wc), float(2*wc)], im=[float(-2*wc), float(2*wc)], points=100000, verbose=True)
 
 if __name__ == "__main__":
   main()
