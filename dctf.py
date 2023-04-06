@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from mpmath import sin, cos, fadd, fsub, fmul, fdiv, power, sqrt, exp, log10, pi, mpc, cplot, fabs, sinh, asinh, cosh, log, coth, plot, polyval, acosh
+from mpmath import sin, cos, fadd, fsub, fmul, fdiv, power, sqrt, exp, log10, pi, mpc, cplot, fabs, sinh, asinh, cosh, log, coth, plot, polyval, acosh, polyroots
 from os import remove
 import argparse
 import logging
@@ -80,6 +80,13 @@ def main():
   R = args.rs
   wc = args.wc
   g = [R]
+  Rs = 1.0
+
+  i = len(C)
+  s = [0]*i
+  for v in C:
+    i = i -1
+    s[i] = v
 
   match len(C):
     case 1:
@@ -88,19 +95,31 @@ def main():
       exit(1)
     case 2:
       Rtot = 2.0
-      mod = fdiv(Rtot,C[1])
-      C1 = fmul(C[0],mod)
+      mod = fdiv(Rtot,s[0])
+      C1 = fmul(s[1],mod)
       g.append(C1)
       g.append(R)
     case 3:
-      Rs = 1.0
-      C1 = fdiv(fmul(2,C[0]),C[1])
-      Rtot = fdiv(fmul(-C[2],fmul(power(C1,2),Rs)),fsub(C[0],fmul(C[2],power(C1,2))))
+      C1 = fdiv(fmul(2,s[2]),s[1])
+      Rtot = fdiv(fmul(-s[0],fmul(power(C1,2),Rs)),fsub(s[2],fmul(s[0],power(C1,2))))
       Rl = fsub(Rtot,Rs)
       L2 = fmul(C1,Rl)
       g.append(C1)
       g.append(L2)
       g.append(Rl)
+    case 4:
+      coeffs = [fadd(fmul(s[0],power(s[3],2)),fsub(power(s[2],3),fmul(s[1],fmul(s[2],s[3])))),fsub(fmul(s[1],fmul(s[2],s[3])),fmul(3,power(s[2],3))),fmul(3,power(s[2],3)),-power(s[2],3)]
+      roots = polyroots(coeffs)
+      Rtot = roots[2]
+      mod = fdiv(Rtot,s[0])
+      Rl = R4 = fsub(Rtot,1)
+      C3 = fdiv(fmul(s[3],Rtot),fmul(s[2],R4))
+      C1 = fdiv(C3,R4)
+      L2 = fdiv(fmul(s[3],mod),power(fmul(C1,R4),2))
+      g.append(C1)
+      g.append(L2)
+      g.append(C3)
+      g.append(R4)
     case _:
       parser.print_usage()
       print("\nerror: more than three coefficients [C] is not currently supported")
