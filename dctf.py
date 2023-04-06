@@ -80,7 +80,7 @@ def main():
   R = args.rs
   wc = args.wc
   g = [R]
-  Rs = 1.0
+  R0 = Rs = 1.0
 
   i = len(C)
   s = [0]*i
@@ -94,28 +94,32 @@ def main():
       print("\nerror: at least two coefficients [C] must be specified")
       exit(1)
     case 2:
-      Rtot = 2.0
+      R2 = R0
+      Rtot = fadd(R0,R2)
       mod = fdiv(Rtot,s[0])
       C1 = fmul(s[1],mod)
       g.append(C1)
-      g.append(1.0)
+      g.append(R2)
       component_poly_f = lambda c: [fmul(c[0].value,fmul(c[1].value,c[2].value)),fadd(c[0].value,c[2].value)]
     case 3:
       C1 = fdiv(fmul(2,s[2]),s[1])
-      Rtot = fdiv(fmul(-s[0],fmul(power(C1,2),Rs)),fsub(s[2],fmul(s[0],power(C1,2))))
-      Rl = fsub(Rtot,Rs)
-      L2 = fmul(C1,Rl)
+      Rtot = fdiv(fmul(-s[0],fmul(power(C1,2),R0)),fsub(s[2],fmul(s[0],power(C1,2))))
+      R3 = Rl = fsub(Rtot,R0)
+      L2 = fmul(C1,R3)
       g.append(C1)
       g.append(L2)
-      g.append(Rl)
+      g.append(R3)
       component_poly_f = lambda c: [fmul(c[0].value,fmul(c[1].value,c[2].value)),fadd(fmul(c[0].value,fmul(c[1].value,c[3].value)),c[2].value),fadd(c[0].value,c[3].value)]
     case 4:
-      coeffs = [fadd(fmul(s[0],power(s[3],2)),fsub(power(s[2],3),fmul(s[1],fmul(s[2],s[3])))),fsub(fmul(s[1],fmul(s[2],s[3])),fmul(3,power(s[2],3))),fmul(3,power(s[2],3)),-power(s[2],3)]
+      a = fmul(s[0],power(s[3],2))
+      b = fmul(fmul(s[1],fmul(s[2],s[3])),-1)
+      coeffs = [a,b,fmul(3,a),fadd(power(s[2],3),fmul(2,b)),fmul(3,a),b,a]
       roots = polyroots(coeffs)
-      Rtot = roots[2]
+      # TODO: take the largest real root and give the user the option to choose alternatives
+      Rl = R4 = roots[1]
+      Rtot = fadd(R0,R4)
       mod = fdiv(Rtot,s[0])
-      Rl = R4 = fsub(Rtot,1)
-      C3 = fdiv(fmul(s[3],Rtot),fmul(s[2],R4))
+      C3 = fdiv(fmul(s[3],fadd(1,power(R4,2))),fmul(s[2],R4))
       C1 = fdiv(C3,R4)
       L2 = fdiv(fmul(s[3],mod),power(fmul(C1,R4),2))
       g.append(C1)
