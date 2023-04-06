@@ -125,7 +125,7 @@ def main():
       component_poly_f = lambda c: [fmul(c[0].value,fmul(c[1].value,fmul(c[2].value,fmul(c[3].value,c[4].value)))),fadd(fmul(c[0].value,fmul(c[1].value,c[2].value)),fmul(c[2].value,fmul(c[3].value,c[4].value))),fadd(fmul(fmul(c[0].value,c[4].value),fadd(c[1].value,c[3].value)),c[2].value),fadd(c[0].value,c[4].value)]
     case _:
       parser.print_usage()
-      print("\nerror: more than three coefficients [C] is not currently supported")
+      print("\nerror: more than four coefficients [C] is not currently supported")
       exit(1)
 
   i = 0
