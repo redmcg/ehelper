@@ -98,7 +98,8 @@ def main():
       mod = fdiv(Rtot,s[0])
       C1 = fmul(s[1],mod)
       g.append(C1)
-      g.append(R)
+      g.append(1.0)
+      component_poly_f = lambda c: [fmul(c[0].value,fmul(c[1].value,c[2].value)),fadd(c[0].value,c[2].value)]
     case 3:
       C1 = fdiv(fmul(2,s[2]),s[1])
       Rtot = fdiv(fmul(-s[0],fmul(power(C1,2),Rs)),fsub(s[2],fmul(s[0],power(C1,2))))
@@ -107,6 +108,7 @@ def main():
       g.append(C1)
       g.append(L2)
       g.append(Rl)
+      component_poly_f = lambda c: [fmul(c[0].value,fmul(c[1].value,c[2].value)),fadd(fmul(c[0].value,fmul(c[1].value,c[3].value)),c[2].value),fadd(c[0].value,c[3].value)]
     case 4:
       coeffs = [fadd(fmul(s[0],power(s[3],2)),fsub(power(s[2],3),fmul(s[1],fmul(s[2],s[3])))),fsub(fmul(s[1],fmul(s[2],s[3])),fmul(3,power(s[2],3))),fmul(3,power(s[2],3)),-power(s[2],3)]
       roots = polyroots(coeffs)
@@ -120,6 +122,7 @@ def main():
       g.append(L2)
       g.append(C3)
       g.append(R4)
+      component_poly_f = lambda c: [fmul(c[0].value,fmul(c[1].value,fmul(c[2].value,fmul(c[3].value,c[4].value)))),fadd(fmul(c[0].value,fmul(c[1].value,c[2].value)),fmul(c[2].value,fmul(c[3].value,c[4].value))),fadd(fmul(fmul(c[0].value,c[4].value),fadd(c[1].value,c[3].value)),c[2].value),fadd(c[0].value,c[4].value)]
     case _:
       parser.print_usage()
       print("\nerror: more than three coefficients [C] is not currently supported")
@@ -177,12 +180,7 @@ def main():
 
     return poly_s
 
-  Rtot = fadd(R,Rl)
-  component_poly = []
-  for i in range(0,len(C)):
-    k = len(C) - 1 - i
-    component_poly.append(fdiv(fmul(Rtot,C[i]),fmul(C[len(C)-1],power(wc,k))))
-
+  component_poly = component_poly_f(c)
   logging.info(f"Normalised: {poly_string(C)}")
   logging.info(f"Component Poly: {poly_string(component_poly)}")
 
