@@ -127,9 +127,29 @@ def main():
       g.append(C3)
       g.append(R4)
       component_poly_f = lambda c: [fmul(c[0].value,fmul(c[1].value,fmul(c[2].value,fmul(c[3].value,c[4].value)))),fadd(fmul(c[0].value,fmul(c[1].value,c[2].value)),fmul(c[2].value,fmul(c[3].value,c[4].value))),fadd(fmul(fmul(c[0].value,c[4].value),fadd(c[1].value,c[3].value)),c[2].value),fadd(c[0].value,c[4].value)]
+    case 5:
+      Rtot = fdiv(fmul(16,fmul(s[0],fmul(s[4],fsub(2,power(s[4],2))))),fadd(fmul(32,fmul(s[0],s[4])),fsub(fmul(4,fmul(s[2],fmul(power(s[3],2),s[4]))),fadd(fmul(8,fmul(s[1],s[3])),fadd(fmul(16,fmul(s[0],power(s[4],3))),power(s[3],4))))))
+      C1 = fdiv(fmul(2,s[4]),s[3])
+
+      nnn = fadd(fmul(16,fmul(s[0],fmul(power(s[4],3),fsub(Rtot,1)))),fsub(fmul(power(s[3],4),Rtot),fmul(4,fmul(s[2],fmul(power(s[3],2),fmul(s[4],Rtot))))))
+      ddd = fmul(16,fmul(s[0],fmul(s[3],fmul(power(s[4],2),fsub(Rtot,1)))))
+      eee = fmul(64,fmul(s[0],fmul(power(s[3],4),fmul(power(s[4],2),Rtot))))
+
+      C3 = fdiv(fsub(sqrt(fsub(power(nnn,2),eee)),nnn),ddd)
+      L4 = fdiv(fmul(2,fmul(s[4],fsub(Rtot,1))),s[3])
+      R5 = fsub(Rtot,1)
+      mod = fdiv(Rtot,s[0])
+      L2 = fdiv(fmul(s[4],mod),fmul(C1,fmul(C3,L4)))
+
+      g.append(C1.real)
+      g.append(L2.real)
+      g.append(C3.real)
+      g.append(L4.real)
+      g.append(R5.real)
+      component_poly_f = lambda c: [fmul(c[0].value,fmul(c[1].value,fmul(c[2].value,fmul(c[3].value,c[4].value)))),fadd(fmul(c[0].value,fmul(c[1].value,fmul(c[2].value,fmul(c[3].value,c[5].value)))),fmul(c[2].value,fmul(c[3].value,c[4].value))),fadd(fmul(c[0].value,fmul(c[1].value,c[2].value)),fadd(fmul(c[0].value,fmul(c[1].value,c[4].value)),fadd(fmul(c[0].value,fmul(c[3].value,c[4].value)),fmul(c[2].value,fmul(c[3].value,c[5].value))))),fadd(fmul(c[0].value,fmul(c[1].value,c[5].value)),fadd(fmul(c[0].value,fmul(c[3].value,c[5].value)),fadd(c[2].value,c[4].value))),fadd(c[0].value,c[5].value)]
     case _:
       parser.print_usage()
-      print("\nerror: more than four coefficients [C] is not currently supported")
+      print("\nerror: more than five coefficients [C] is not currently supported")
       exit(1)
 
   i = 0
